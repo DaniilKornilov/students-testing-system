@@ -1,10 +1,20 @@
 package ru.poly.studentstestingsystem.entity;
 
-import lombok.*;
-import ru.poly.studentstestingsystem.entity.enumeration.RoleEnum;
-
-import javax.persistence.*;
 import java.util.Objects;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
+import ru.poly.studentstestingsystem.entity.enumeration.RoleEnum;
 
 @Entity
 @Table
@@ -14,6 +24,7 @@ import java.util.Objects;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Role {
+
     @Id
     @SequenceGenerator(
             name = "role_sequence",
@@ -31,8 +42,12 @@ public class Role {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Role role)) return false;
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof Role role)) {
+            return false;
+        }
         return getId() == role.getId() && getRoleEnum() == role.getRoleEnum();
     }
 

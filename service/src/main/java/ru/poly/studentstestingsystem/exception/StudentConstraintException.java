@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 @ResponseStatus(value = HttpStatus.BAD_REQUEST)
 public class StudentConstraintException extends RuntimeException {
+
     public StudentConstraintException(String message) {
         super(message);
     }

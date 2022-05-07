@@ -1,5 +1,7 @@
 package ru.poly.studentstestingsystem.service.impl;
 
+import java.util.HashSet;
+import java.util.Set;
 import org.apache.commons.validator.routines.EmailValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -13,11 +15,9 @@ import ru.poly.studentstestingsystem.repository.RoleRepository;
 import ru.poly.studentstestingsystem.repository.UserRepository;
 import ru.poly.studentstestingsystem.service.AuthService;
 
-import java.util.HashSet;
-import java.util.Set;
-
 @Service
 public class AuthServiceImpl implements AuthService {
+
     private static final String USERNAME_TAKEN_MESSAGE = "Error: Username: %s already taken";
 
     private static final String USERNAME_INVALID_MESSAGE = "Error: Username is invalid";
@@ -38,8 +38,8 @@ public class AuthServiceImpl implements AuthService {
 
     @Autowired
     public AuthServiceImpl(UserRepository userRepository,
-                           PasswordEncoder passwordEncoder,
-                           RoleRepository roleRepository) {
+            PasswordEncoder passwordEncoder,
+            RoleRepository roleRepository) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.roleRepository = roleRepository;

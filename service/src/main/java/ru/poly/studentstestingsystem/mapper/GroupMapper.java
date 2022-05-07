@@ -8,6 +8,7 @@ import ru.poly.studentstestingsystem.entity.Group;
 @Mapper(componentModel = "spring", unmappedSourcePolicy = ReportingPolicy.ERROR,
         unmappedTargetPolicy = ReportingPolicy.ERROR, typeConversionPolicy = ReportingPolicy.ERROR)
 public interface GroupMapper {
+
     Group map(GroupDto groupDto);
 
     GroupDto map(Group group);

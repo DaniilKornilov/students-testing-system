@@ -1,17 +1,17 @@
 package ru.poly.studentstestingsystem.security.jwt;
 
 import io.jsonwebtoken.security.Keys;
+import javax.crypto.SecretKey;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpHeaders;
 
-import javax.crypto.SecretKey;
-
 @Configuration
 @ConfigurationProperties(prefix = "jwt")
 @EnableConfigurationProperties(JwtConfig.class)
 public class JwtConfig {
+
     private String secretKey;
     private String tokenPrefix;
     private Integer tokenExpirationAfterDays;

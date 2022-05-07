@@ -22,6 +22,7 @@ import ru.poly.studentstestingsystem.service.impl.UserDetailsServiceImpl;
 @Configuration
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
+
     private final UserDetailsServiceImpl userDetailsService;
 
     private final AuthEntryPointJwt unauthorizedHandler;
@@ -32,9 +33,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     public WebSecurityConfig(UserDetailsServiceImpl userDetailsService,
-                             AuthEntryPointJwt unauthorizedHandler,
-                             JwtConfig jwtConfig,
-                             PasswordEncoder passwordEncoder) {
+            AuthEntryPointJwt unauthorizedHandler,
+            JwtConfig jwtConfig,
+            PasswordEncoder passwordEncoder) {
         this.unauthorizedHandler = unauthorizedHandler;
         this.userDetailsService = userDetailsService;
         this.jwtConfig = jwtConfig;

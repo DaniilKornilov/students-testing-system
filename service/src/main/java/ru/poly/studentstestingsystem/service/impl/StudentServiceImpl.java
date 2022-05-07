@@ -1,5 +1,10 @@
 package ru.poly.studentstestingsystem.service.impl;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -7,21 +12,15 @@ import ru.poly.studentstestingsystem.dto.StudentDto;
 import ru.poly.studentstestingsystem.entity.Group;
 import ru.poly.studentstestingsystem.entity.Student;
 import ru.poly.studentstestingsystem.excelhandler.ExcelStudentsReader;
-import ru.poly.studentstestingsystem.exception.StudentConstraintException;
 import ru.poly.studentstestingsystem.exception.StudentNotFoundException;
 import ru.poly.studentstestingsystem.mapper.StudentMapper;
 import ru.poly.studentstestingsystem.repository.GroupRepository;
 import ru.poly.studentstestingsystem.repository.StudentRepository;
 import ru.poly.studentstestingsystem.service.StudentService;
 
-import javax.transaction.Transactional;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
-
 @Service
 public class StudentServiceImpl implements StudentService {
+
     private static final String STUDENT_NOT_FOUND_MESSAGE = "Student with id %s not found!";
 
     private static final String STUDENT_WITH_EMAIL_EXISTS = "Student with email %s already exists!";
@@ -60,9 +59,9 @@ public class StudentServiceImpl implements StudentService {
         List<StudentDto> savedStudentDtos = new ArrayList<>();
         for (StudentDto studentDto : studentDtos) {
             Student student = studentMapper.map(studentDto);
-            if (studentRepository.existsByEmail(student.getEmail())) {
-                throw new StudentConstraintException(String.format(STUDENT_WITH_EMAIL_EXISTS, student.getEmail()));
-            }
+//            if (studentRepository.existsByEmail(student.getEmail())) {
+//                throw new StudentConstraintException(String.format(STUDENT_WITH_EMAIL_EXISTS, student.getEmail()));
+//            }
             Group group = student.getGroup();
             Optional<Group> groupOptional = groupRepository.findByName(group.getName());
             if (groupOptional.isEmpty()) {

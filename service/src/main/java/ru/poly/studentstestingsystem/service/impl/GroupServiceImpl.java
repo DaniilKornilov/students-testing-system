@@ -1,5 +1,7 @@
 package ru.poly.studentstestingsystem.service.impl;
 
+import java.util.List;
+import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.poly.studentstestingsystem.dto.GroupDto;
@@ -7,9 +9,6 @@ import ru.poly.studentstestingsystem.exception.StudentNotFoundException;
 import ru.poly.studentstestingsystem.mapper.GroupMapper;
 import ru.poly.studentstestingsystem.repository.GroupRepository;
 import ru.poly.studentstestingsystem.service.GroupService;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class GroupServiceImpl implements GroupService {

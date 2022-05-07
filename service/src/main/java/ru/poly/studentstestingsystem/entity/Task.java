@@ -9,7 +9,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -25,51 +24,46 @@ import lombok.ToString;
 @NoArgsConstructor
 @Entity
 @Table
-public class Student {
+public class Task {
 
     @Id
     @SequenceGenerator(
-            name = "student_sequence",
-            sequenceName = "student_sequence",
+            name = "task_sequence",
+            sequenceName = "task_sequence",
             allocationSize = 1
     )
     @GeneratedValue(
             strategy = GenerationType.SEQUENCE,
-            generator = "student_sequence"
+            generator = "task_sequence"
     )
     private long id;
 
     @Column(nullable = false)
-    private String firstName;
+    private String name;
 
-    @Column(nullable = false)
-    private String lastName;
+    @Column(columnDefinition = "TEXT", nullable = false)
+    private String description;
 
     @ManyToOne
-    @JoinColumn(name = "group_id", foreignKey = @ForeignKey(name = "student_group_fk"))
-    private Group group;
-
-    @OneToOne
-    @JoinColumn(name = "user_id", foreignKey = @ForeignKey(name = "student_user_fk"), nullable = false)
-    private User user;
+    @JoinColumn(name = "test_id", foreignKey = @ForeignKey(name = "task_test_fk"), nullable = false)
+    private Test test;
 
     @Override
     public boolean equals(Object o) {
         if (this == o) {
             return true;
         }
-        if (!(o instanceof Student student)) {
+        if (!(o instanceof Task task)) {
             return false;
         }
-        return getId() == student.getId() &&
-                getFirstName().equals(student.getFirstName()) &&
-                getLastName().equals(student.getLastName()) &&
-                getGroup().equals(student.getGroup()) &&
-                getUser().equals(student.getUser());
+        return getId() == task.getId() &&
+                getName().equals(task.getName()) &&
+                getDescription().equals(task.getDescription()) &&
+                getTest().equals(task.getTest());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getId(), getFirstName(), getLastName(), getGroup(), getUser());
+        return Objects.hash(getId(), getName(), getDescription(), getTest());
     }
 }

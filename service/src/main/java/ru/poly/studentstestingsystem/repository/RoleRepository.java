@@ -7,6 +7,7 @@ import ru.poly.studentstestingsystem.entity.enumeration.RoleEnum;
 
 @Repository
 public interface RoleRepository extends JpaRepository<Role, Long> {
+
     Role findByRoleEnum(RoleEnum roleEnum);
 
     Boolean existsByRoleEnum(RoleEnum roleEnum);

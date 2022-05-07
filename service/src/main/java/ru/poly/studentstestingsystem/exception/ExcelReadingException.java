@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 @ResponseStatus(value = HttpStatus.BAD_REQUEST)
 public class ExcelReadingException extends RuntimeException {
+
     public ExcelReadingException(String message) {
         super(message);
     }

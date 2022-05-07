@@ -9,7 +9,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -25,51 +24,42 @@ import lombok.ToString;
 @NoArgsConstructor
 @Entity
 @Table
-public class Student {
+public class Image {
 
     @Id
     @SequenceGenerator(
-            name = "student_sequence",
-            sequenceName = "student_sequence",
+            name = "image_sequence",
+            sequenceName = "image_sequence",
             allocationSize = 1
     )
     @GeneratedValue(
             strategy = GenerationType.SEQUENCE,
-            generator = "student_sequence"
+            generator = "image_sequence"
     )
     private long id;
 
-    @Column(nullable = false)
-    private String firstName;
-
-    @Column(nullable = false)
-    private String lastName;
-
     @ManyToOne
-    @JoinColumn(name = "group_id", foreignKey = @ForeignKey(name = "student_group_fk"))
-    private Group group;
+    @JoinColumn(name = "task_id", foreignKey = @ForeignKey(name = "image_task_fk"), nullable = false)
+    private Task task;
 
-    @OneToOne
-    @JoinColumn(name = "user_id", foreignKey = @ForeignKey(name = "student_user_fk"), nullable = false)
-    private User user;
+    @Column(nullable = false)
+    private String path;
 
     @Override
     public boolean equals(Object o) {
         if (this == o) {
             return true;
         }
-        if (!(o instanceof Student student)) {
+        if (!(o instanceof Image image)) {
             return false;
         }
-        return getId() == student.getId() &&
-                getFirstName().equals(student.getFirstName()) &&
-                getLastName().equals(student.getLastName()) &&
-                getGroup().equals(student.getGroup()) &&
-                getUser().equals(student.getUser());
+        return getId() == image.getId() &&
+                getTask().equals(image.getTask()) &&
+                getPath().equals(image.getPath());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getId(), getFirstName(), getLastName(), getGroup(), getUser());
+        return Objects.hash(getId(), getTask(), getPath());
     }
 }

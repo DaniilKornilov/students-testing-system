@@ -1,5 +1,6 @@
 package ru.poly.studentstestingsystem.service.impl;
 
+import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -8,10 +9,9 @@ import org.springframework.stereotype.Service;
 import ru.poly.studentstestingsystem.entity.User;
 import ru.poly.studentstestingsystem.repository.UserRepository;
 
-import javax.transaction.Transactional;
-
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
+
     private static final String USER_NOT_FOUND_MESSAGE = "User with username: %s not found!";
 
     private final UserRepository userRepository;

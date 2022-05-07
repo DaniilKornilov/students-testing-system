@@ -1,14 +1,13 @@
 package ru.poly.studentstestingsystem.service.impl;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import java.util.Collection;
+import java.util.List;
+import java.util.stream.Collectors;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import ru.poly.studentstestingsystem.entity.User;
-
-import java.util.Collection;
-import java.util.List;
-import java.util.stream.Collectors;
 
 public record UserDetailsImpl(Long id, String username, String email,
                               @JsonIgnore String password,

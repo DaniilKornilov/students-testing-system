@@ -1,6 +1,14 @@
 package ru.poly.studentstestingsystem.excelhandler;
 
-import org.apache.poi.ss.usermodel.*;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.DataFormatter;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
@@ -9,13 +17,9 @@ import ru.poly.studentstestingsystem.dto.StudentDto;
 import ru.poly.studentstestingsystem.excelhandler.constants.ExcelStudentsConstants;
 import ru.poly.studentstestingsystem.exception.ExcelReadingException;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-
 @Component
 public class ExcelStudentsReader {
+
     private static final String EXCEL_READING_ERROR = "Excel file is invalid!";
 
     private static final String STUDENTS_HEADERS_ERROR = "Student excel file headers are invalid!";
@@ -72,7 +76,7 @@ public class ExcelStudentsReader {
                     setStudentDtoValues(studentDto, j, cellValue);
                 }
             }
-            if (studentDto.getEmail() != null && studentDto.getName() != null) {
+            if (studentDto.getFirstName() != null && studentDto.getLastName() != null) {
                 studentDtos.add(studentDto);
             }
         }
@@ -82,8 +86,8 @@ public class ExcelStudentsReader {
 
     private void setStudentDtoValues(StudentDto studentDto, int index, String value) {
         switch (index) {
-            case ExcelStudentsConstants.NAME_COLUMN_INDEX -> studentDto.setName(value);
-            case ExcelStudentsConstants.EMAIL_COLUMN_INDEX -> studentDto.setEmail(value);
+            case ExcelStudentsConstants.NAME_COLUMN_INDEX -> studentDto.setFirstName(value);
+            case ExcelStudentsConstants.EMAIL_COLUMN_INDEX -> studentDto.setLastName(value);
             case ExcelStudentsConstants.GROUP_COLUMN_INDEX -> {
                 GroupDto groupDto = new GroupDto();
                 groupDto.setName(value);

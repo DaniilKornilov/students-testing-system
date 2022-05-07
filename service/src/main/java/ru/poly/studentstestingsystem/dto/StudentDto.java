@@ -8,11 +8,12 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 public class StudentDto {
+
     private long id;
 
-    private String name;
+    private String firstName;
 
-    private String email;
+    private String lastName;
 
     private GroupDto groupDto;
 }

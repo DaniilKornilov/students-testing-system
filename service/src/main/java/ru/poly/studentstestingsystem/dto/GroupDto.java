@@ -8,6 +8,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 public class GroupDto {
+
     private long id;
 
     private String name;
