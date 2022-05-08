@@ -7,15 +7,13 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class StudentDto {
+public class TeacherDto {
 
     private long id;
 
     private String firstName;
 
     private String lastName;
-
-    private GroupDto groupDto;
 
     private UserDto userDto;
 }

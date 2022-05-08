@@ -11,7 +11,6 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import ru.poly.studentstestingsystem.entity.enumeration.RoleEnum;
 import ru.poly.studentstestingsystem.security.jwt.AuthEntryPointJwt;
 import ru.poly.studentstestingsystem.security.jwt.JwtConfig;
 import ru.poly.studentstestingsystem.security.jwt.JwtTokenVerifierFilter;
@@ -54,10 +53,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers("/api/auth/**")
                 .permitAll()
-                .antMatchers("/api/test/**")
-                .permitAll()
-                .antMatchers("/api/student/**")
-                .hasRole(RoleEnum.ROLE_ADMIN.getRoleName())
                 .anyRequest()
                 .authenticated();
     }

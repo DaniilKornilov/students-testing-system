@@ -7,5 +7,6 @@ import ru.poly.studentstestingsystem.entity.Student;
 
 @Repository
 public interface StudentRepository extends JpaRepository<Student, Long> {
+
     List<Student> findStudentsByGroup_Name(String groupName);
 }

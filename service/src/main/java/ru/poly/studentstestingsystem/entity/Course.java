@@ -1,5 +1,6 @@
 package ru.poly.studentstestingsystem.entity;
 
+import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 import javax.persistence.Column;
@@ -15,6 +16,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -27,7 +29,9 @@ import lombok.ToString;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table
+@Table(uniqueConstraints = {
+        @UniqueConstraint(columnNames = "name", name = "course_name_uk"),
+})
 public class Course {
 
     @Id
@@ -53,7 +57,7 @@ public class Course {
     @JoinTable(name = "course_group",
             joinColumns = @JoinColumn(name = "course_id", foreignKey = @ForeignKey(name = "course_group_fk")),
             inverseJoinColumns = @JoinColumn(name = "group_id", foreignKey = @ForeignKey(name = "group_course_fk")))
-    private Set<Group> groups;
+    private Set<Group> groups = new HashSet<>();
 
     @Override
     public boolean equals(Object o) {

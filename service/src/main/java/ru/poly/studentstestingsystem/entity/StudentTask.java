@@ -39,7 +39,7 @@ public class StudentTask {
     )
     private long id;
 
-    @Column(name = "is_correct")
+    @Column(name = "is_correct", nullable = false)
     private boolean isCorrect;
 
     @ManyToOne

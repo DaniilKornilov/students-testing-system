@@ -47,8 +47,8 @@ create table image
 );
 create table role
 (
-    id        int8 not null,
-    role_enum varchar(255),
+    id             int8 not null,
+    role_enum_name varchar(255),
     primary key (id)
 );
 create table student
@@ -56,7 +56,7 @@ create table student
     id         int8         not null,
     first_name varchar(255) not null,
     last_name  varchar(255) not null,
-    group_id   int8,
+    group_id   int8         not null,
     user_id    int8         not null,
     primary key (id)
 );
@@ -72,7 +72,7 @@ create table student_task
 (
     id                 int8      not null,
     finished_timestamp timestamp not null,
-    is_correct         boolean,
+    is_correct         boolean   not null,
     started_timestamp  timestamp not null,
     student_test_id    int8      not null,
     task_id            int8      not null,
@@ -128,6 +128,8 @@ create table users
     username varchar(255) not null,
     primary key (id)
 );
+alter table if exists course
+    add constraint course_name_uk unique (name);
 alter table if exists groups
     add constraint group_name_uk unique (name);
 alter table if exists users

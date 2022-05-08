@@ -1,6 +1,7 @@
 package ru.poly.studentstestingsystem.entity;
 
 import java.util.Objects;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -38,6 +39,7 @@ public class Role {
     private long id;
 
     @Enumerated(EnumType.STRING)
+    @Column(name = "role_enum_name")
     private RoleEnum roleEnum;
 
     @Override

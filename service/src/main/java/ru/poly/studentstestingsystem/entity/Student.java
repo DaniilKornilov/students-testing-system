@@ -46,7 +46,7 @@ public class Student {
     private String lastName;
 
     @ManyToOne
-    @JoinColumn(name = "group_id", foreignKey = @ForeignKey(name = "student_group_fk"))
+    @JoinColumn(name = "group_id", foreignKey = @ForeignKey(name = "student_group_fk"), nullable = false)
     private Group group;
 
     @OneToOne

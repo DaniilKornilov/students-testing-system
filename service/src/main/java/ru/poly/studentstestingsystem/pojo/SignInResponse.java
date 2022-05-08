@@ -13,6 +13,8 @@ import lombok.ToString;
 public class SignInResponse {
 
     private String subject;
+
     private Collection<?> authorities;
+
     private String token;
 }

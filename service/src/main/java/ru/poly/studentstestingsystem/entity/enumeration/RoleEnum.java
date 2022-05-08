@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public enum RoleEnum {
-    ROLE_USER("USER"), ROLE_ADMIN("ADMIN");
+    ROLE_STUDENT("STUDENT"), ROLE_ADMIN("ADMIN"), ROLE_TEACHER("TEACHER");
     private static final Map<String, RoleEnum> lookup = new HashMap<>();
 
     static {
