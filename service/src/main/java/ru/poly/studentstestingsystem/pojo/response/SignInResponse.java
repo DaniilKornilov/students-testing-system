@@ -1,4 +1,4 @@
-package ru.poly.studentstestingsystem.pojo;
+package ru.poly.studentstestingsystem.pojo.response;
 
 import java.util.Collection;
 import lombok.Getter;

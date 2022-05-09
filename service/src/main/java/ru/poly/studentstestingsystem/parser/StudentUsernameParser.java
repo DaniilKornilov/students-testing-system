@@ -7,15 +7,17 @@ import ru.poly.studentstestingsystem.vo.StudentUsernameValues;
 @Component
 public class StudentUsernameParser {
 
-    private static final String COURSE_NAME_DELIMITER = "_";
+    private static final char COURSE_NAME_DELIMITER = '_';
 
-    private static final String TEACHER_USERNAME_DELIMITER = ".";
+    private static final char TEACHER_USERNAME_DELIMITER = '.';
 
-    private static final String GROUP_NAME_DELIMITER = "/";
+    private static final char GROUP_NAME_DELIMITER = '/';
 
     private static final String INVALID_STUDENT_USERNAME_MESSAGE =
             "Неверный идентификатор студента! " + "Введите данные в формате курс_преподаватель.группа/студент " +
                     "Было получено: %s";
+
+    private static final String NOT_UNIQUE_SPECIAL_SYMBOL_MESSAGE = "Символ: \"%s\" должен быть уникальным!";
 
     public StudentUsernameValues parse(String studentUsername) {
         validateDelimiters(studentUsername);
@@ -31,6 +33,10 @@ public class StudentUsernameParser {
     }
 
     private void validateDelimiters(String studentUsername) {
+        checkIfSpecialSymbolIsUnique(studentUsername, COURSE_NAME_DELIMITER);
+        checkIfSpecialSymbolIsUnique(studentUsername, GROUP_NAME_DELIMITER);
+        checkIfSpecialSymbolIsUnique(studentUsername, TEACHER_USERNAME_DELIMITER);
+
         int courseDelimiterIndex = studentUsername.indexOf(COURSE_NAME_DELIMITER);
         int teacherDelimiterIndex = studentUsername.indexOf(TEACHER_USERNAME_DELIMITER);
         int groupDelimiterIndex = studentUsername.indexOf(GROUP_NAME_DELIMITER);
@@ -39,6 +45,15 @@ public class StudentUsernameParser {
         }
         if (teacherDelimiterIndex > groupDelimiterIndex) {
             throw new StudentConstraintException(String.format(INVALID_STUDENT_USERNAME_MESSAGE, studentUsername));
+        }
+    }
+
+    private void checkIfSpecialSymbolIsUnique(String studentUsername, char symbol) {
+        int symbolIndex = studentUsername.indexOf(symbol);
+        if (symbolIndex == -1 || studentUsername.substring(symbolIndex + 1).indexOf(symbol) != -1) {
+            throw new StudentConstraintException(
+                    String.format(INVALID_STUDENT_USERNAME_MESSAGE, studentUsername)
+                            + String.format(NOT_UNIQUE_SPECIAL_SYMBOL_MESSAGE, symbol));
         }
     }
 
@@ -51,8 +66,8 @@ public class StudentUsernameParser {
     private void parseAndSetGroupName(StudentUsernameValues studentUsernameValues, String studentUsername) {
         int groupDelimiterIndex = studentUsername.indexOf(GROUP_NAME_DELIMITER);
         int teacherDelimiterIndex = studentUsername.indexOf(TEACHER_USERNAME_DELIMITER);
-        String teacherUsername = studentUsername.substring(teacherDelimiterIndex + 1, groupDelimiterIndex);
-        studentUsernameValues.setTeacherUsername(teacherUsername);
+        String groupName = studentUsername.substring(teacherDelimiterIndex + 1, groupDelimiterIndex);
+        studentUsernameValues.setGroupName(groupName);
     }
 
     private void parseAndSetTeacherUsername(StudentUsernameValues studentUsernameValues, String studentUsername) {

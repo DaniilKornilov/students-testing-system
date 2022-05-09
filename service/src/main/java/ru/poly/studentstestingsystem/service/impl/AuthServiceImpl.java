@@ -2,7 +2,6 @@ package ru.poly.studentstestingsystem.service.impl;
 
 import java.util.HashSet;
 import java.util.Set;
-import org.apache.commons.validator.routines.EmailValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -10,7 +9,7 @@ import ru.poly.studentstestingsystem.entity.Role;
 import ru.poly.studentstestingsystem.entity.User;
 import ru.poly.studentstestingsystem.entity.enumeration.RoleEnum;
 import ru.poly.studentstestingsystem.exception.InvalidSignUpRequestBody;
-import ru.poly.studentstestingsystem.pojo.SignUpRequest;
+import ru.poly.studentstestingsystem.pojo.request.SignUpRequest;
 import ru.poly.studentstestingsystem.repository.RoleRepository;
 import ru.poly.studentstestingsystem.repository.UserRepository;
 import ru.poly.studentstestingsystem.service.AuthService;
@@ -18,17 +17,10 @@ import ru.poly.studentstestingsystem.service.AuthService;
 @Service
 public class AuthServiceImpl implements AuthService {
 
-    private static final String USERNAME_TAKEN_MESSAGE = "Error: Username: %s already taken";
+    private static final String USERNAME_TAKEN_MESSAGE = "Ошибка! имя пользователя: %s уже занято";
 
-    private static final String USERNAME_INVALID_MESSAGE = "Error: Username is invalid";
-
-    private static final String EMAIL_TAKEN_MESSAGE = "Error: Email: %s already taken";
-
-    private static final String EMAIL_INVALID_MESSAGE = "Error: Email is invalid";
-
-    private static final String PASSWORD_INVALID_MESSAGE = "Error: Password is invalid";
-
-    private static final String ROLES_INVALID_MESSAGE = "Error: Roles are invalid";
+    private static final String ROLES_INVALID_MESSAGE =
+            "Введена неверная роль! Возможные варианты: ADMIN, TEACHER, STUDENT. Получены: %s.";
 
     private final UserRepository userRepository;
 
@@ -65,47 +57,20 @@ public class AuthServiceImpl implements AuthService {
         String username = signUpRequest.getUsername();
         validateUsername(username);
 
-        String email = signUpRequest.getEmail();
-        validateEmail(email);
-
-        String password = signUpRequest.getPassword();
-        validatePassword(password);
-
         Set<String> roles = signUpRequest.getRoles();
         validateRoles(roles);
     }
 
     private void validateUsername(String username) {
-        if (username == null || username.length() < 2 || username.length() > 20) {
-            throw new InvalidSignUpRequestBody(USERNAME_INVALID_MESSAGE);
-        }
         if (userRepository.existsByUsername(username)) {
             throw new InvalidSignUpRequestBody(String.format(USERNAME_TAKEN_MESSAGE, username));
         }
     }
 
-    private void validateEmail(String email) {
-        if (email == null || !EmailValidator.getInstance().isValid(email)) {
-            throw new InvalidSignUpRequestBody(EMAIL_INVALID_MESSAGE);
-        }
-        if (userRepository.existsByEmail(email)) {
-            throw new InvalidSignUpRequestBody(String.format(EMAIL_TAKEN_MESSAGE, email));
-        }
-    }
-
-    private void validatePassword(String password) {
-        if (password == null || password.length() < 2 || password.length() > 20) {
-            throw new InvalidSignUpRequestBody(PASSWORD_INVALID_MESSAGE);
-        }
-    }
-
     private void validateRoles(Set<String> roles) {
-        if (roles == null) {
-            throw new InvalidSignUpRequestBody(ROLES_INVALID_MESSAGE);
-        }
         roles.forEach(role -> {
             if (!roleRepository.existsByRoleEnum(RoleEnum.get(role))) {
-                throw new InvalidSignUpRequestBody(ROLES_INVALID_MESSAGE);
+                throw new InvalidSignUpRequestBody(String.format(ROLES_INVALID_MESSAGE, roles));
             }
         });
     }

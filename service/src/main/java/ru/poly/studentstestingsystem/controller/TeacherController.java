@@ -1,5 +1,6 @@
 package ru.poly.studentstestingsystem.controller;
 
+import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -8,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ru.poly.studentstestingsystem.dto.TeacherDto;
-import ru.poly.studentstestingsystem.pojo.TeacherSignUpRequest;
+import ru.poly.studentstestingsystem.pojo.request.TeacherSignUpRequest;
 import ru.poly.studentstestingsystem.service.TeacherService;
 
 @RestController
@@ -24,7 +25,7 @@ public class TeacherController {
     }
 
     @PostMapping("/signUp")
-    public ResponseEntity<?> registerUser(@RequestBody TeacherSignUpRequest teacherSignUpRequest) {
+    public ResponseEntity<?> registerUser(@Valid @RequestBody TeacherSignUpRequest teacherSignUpRequest) {
         TeacherDto teacherDto = teacherService.registerTeacher(teacherSignUpRequest);
         return ResponseEntity.ok(teacherDto);
     }

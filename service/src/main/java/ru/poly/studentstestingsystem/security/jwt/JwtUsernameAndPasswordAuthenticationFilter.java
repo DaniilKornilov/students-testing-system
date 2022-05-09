@@ -8,14 +8,15 @@ import java.time.LocalDate;
 import javax.servlet.FilterChain;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import ru.poly.studentstestingsystem.pojo.SignInRequest;
-import ru.poly.studentstestingsystem.pojo.SignInResponse;
+import ru.poly.studentstestingsystem.pojo.request.SignInRequest;
+import ru.poly.studentstestingsystem.pojo.response.SignInResponse;
 
 public class JwtUsernameAndPasswordAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
@@ -33,7 +34,7 @@ public class JwtUsernameAndPasswordAuthenticationFilter extends UsernamePassword
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response)
             throws AuthenticationException {
         try {
-            SignInRequest authenticationRequest = new ObjectMapper()
+            @Valid SignInRequest authenticationRequest = new ObjectMapper()
                     .readValue(request.getInputStream(), SignInRequest.class);
 
             Authentication authentication = new UsernamePasswordAuthenticationToken(

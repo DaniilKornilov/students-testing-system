@@ -133,8 +133,6 @@ alter table if exists course
 alter table if exists groups
     add constraint group_name_uk unique (name);
 alter table if exists users
-    add constraint user_email_uk unique (email);
-alter table if exists users
     add constraint username_uk unique (username);
 alter table if exists answer
     add constraint answer_task_fk foreign key (task_id) references task;

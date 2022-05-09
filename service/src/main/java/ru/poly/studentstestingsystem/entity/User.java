@@ -23,7 +23,6 @@ import lombok.ToString;
 
 @Entity
 @Table(name = "users", uniqueConstraints = {
-        @UniqueConstraint(columnNames = "email", name = "user_email_uk"),
         @UniqueConstraint(columnNames = "username", name = "username_uk"),
 })
 @Getter

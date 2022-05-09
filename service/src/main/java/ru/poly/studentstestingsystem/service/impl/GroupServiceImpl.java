@@ -13,7 +13,7 @@ import ru.poly.studentstestingsystem.service.GroupService;
 @Service
 public class GroupServiceImpl implements GroupService {
 
-    private static final String GROUP_NOT_FOUND_MESSAGE = "Group with id %s not found!";
+    private static final String GROUP_NOT_FOUND_MESSAGE = "Группа с id %s не найдена!";
 
     private final GroupRepository groupRepository;
 

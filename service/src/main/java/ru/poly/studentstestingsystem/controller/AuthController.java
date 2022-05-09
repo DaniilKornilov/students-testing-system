@@ -1,5 +1,6 @@
 package ru.poly.studentstestingsystem.controller;
 
+import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -8,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ru.poly.studentstestingsystem.entity.User;
-import ru.poly.studentstestingsystem.pojo.SignUpRequest;
+import ru.poly.studentstestingsystem.pojo.request.SignUpRequest;
 import ru.poly.studentstestingsystem.service.AuthService;
 
 @RestController
@@ -24,7 +25,7 @@ public class AuthController {
     }
 
     @PostMapping("/signUp")
-    public ResponseEntity<?> registerUser(@RequestBody SignUpRequest signUpRequest) {
+    public ResponseEntity<?> registerUser(@Valid @RequestBody SignUpRequest signUpRequest) {
         User user = authService.registerUser(signUpRequest);
         return ResponseEntity.ok(user);
     }

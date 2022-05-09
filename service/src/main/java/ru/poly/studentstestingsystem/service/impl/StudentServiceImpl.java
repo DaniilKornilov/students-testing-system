@@ -7,6 +7,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 import javax.transaction.Transactional;
+import org.apache.commons.validator.routines.EmailValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -23,7 +24,7 @@ import ru.poly.studentstestingsystem.exception.StudentConstraintException;
 import ru.poly.studentstestingsystem.exception.StudentNotFoundException;
 import ru.poly.studentstestingsystem.mapper.StudentMapper;
 import ru.poly.studentstestingsystem.parser.StudentUsernameParser;
-import ru.poly.studentstestingsystem.pojo.SignUpRequest;
+import ru.poly.studentstestingsystem.pojo.request.SignUpRequest;
 import ru.poly.studentstestingsystem.repository.CourseRepository;
 import ru.poly.studentstestingsystem.repository.GroupRepository;
 import ru.poly.studentstestingsystem.repository.StudentRepository;
@@ -38,7 +39,8 @@ public class StudentServiceImpl implements StudentService {
 
     private static final String STUDENT_NOT_FOUND_MESSAGE = "Студент с id %s не найден!";
 
-    private static final String STUDENT_WITH_EMAIL_EXISTS = "Студент с email %s уже существует!";
+    private static final String STUDENT_INVALID_EMAIL =
+            "Студент с невалидным email: %s!" + " Пожалуйста, введите корректный email";
 
     private static final String STUDENT_WITH_USERNAME_EXISTS = "Студент с идентификатором %s уже существует!";
 
@@ -86,6 +88,7 @@ public class StudentServiceImpl implements StudentService {
     public List<StudentDto> importStudents(MultipartFile file) {
         List<StudentDto> studentDtos = excelStudentsReader.readExcel(file);
         List<StudentDto> savedStudentDtos = new ArrayList<>();
+
         for (StudentDto studentDto : studentDtos) {
             StudentUsernameValues studentUsernameValues = getStudentUsernameValues(studentDto);
             Student student = studentMapper.map(studentDto);
@@ -98,11 +101,9 @@ public class StudentServiceImpl implements StudentService {
             Group group = getGroupOrCreateNewByName(studentUsernameValues.getGroupName());
             student.setGroup(group);
 
-            Course course = getCourseOrCreateNewByName(studentUsernameValues.getCourseName());
-            course.getGroups().add(group);
-
             Teacher teacher = getTeacher(studentUsernameValues.getTeacherUsername());
-            course.setTeacher(teacher);
+
+            getCourseOrCreateNewByName(studentUsernameValues.getCourseName(), group, teacher);
 
             Student savedStudent = studentRepository.save(student);
             savedStudentDtos.add(studentMapper.map(savedStudent));
@@ -112,14 +113,22 @@ public class StudentServiceImpl implements StudentService {
     }
 
     private void validateStudent(Student student) {
-        String email = student.getUser().getEmail();
-        if (userRepository.existsByEmail(email)) {
-            throw new StudentConstraintException(String.format(STUDENT_WITH_EMAIL_EXISTS, email));
-        }
-
         String username = student.getUser().getUsername();
+        validateStudentUsername(username);
+
+        String email = student.getUser().getEmail();
+        validateStudentEmail(email);
+    }
+
+    private void validateStudentUsername(String username) {
         if (userRepository.existsByUsername(username)) {
             throw new StudentConstraintException(String.format(STUDENT_WITH_USERNAME_EXISTS, username));
+        }
+    }
+
+    private void validateStudentEmail(String email) {
+        if (!EmailValidator.getInstance().isValid(email)) {
+            throw new StudentConstraintException(String.format(STUDENT_INVALID_EMAIL, email));
         }
     }
 
@@ -139,14 +148,14 @@ public class StudentServiceImpl implements StudentService {
         }
     }
 
-    private Course getCourseOrCreateNewByName(String courseName) {
+    private void getCourseOrCreateNewByName(String courseName, Group group, Teacher teacher) {
         Optional<Course> courseOptional = courseRepository.findByName(courseName);
         if (courseOptional.isEmpty()) {
             Course course = new Course();
             course.setName(courseName);
-            return courseRepository.saveAndFlush(course);
-        } else {
-            return courseOptional.get();
+            course.setTeacher(teacher);
+            course.getGroups().add(group);
+            courseRepository.saveAndFlush(course);
         }
     }
 

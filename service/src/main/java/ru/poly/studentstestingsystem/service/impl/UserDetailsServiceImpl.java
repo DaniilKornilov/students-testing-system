@@ -12,7 +12,7 @@ import ru.poly.studentstestingsystem.repository.UserRepository;
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
 
-    private static final String USER_NOT_FOUND_MESSAGE = "User with username: %s not found!";
+    private static final String USER_NOT_FOUND_MESSAGE = "Пользователь с именем: %s не найден!";
 
     private final UserRepository userRepository;
 
