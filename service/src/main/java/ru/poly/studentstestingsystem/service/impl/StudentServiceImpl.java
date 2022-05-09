@@ -1,23 +1,12 @@
 package ru.poly.studentstestingsystem.service.impl;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Collectors;
-import javax.transaction.Transactional;
 import org.apache.commons.validator.routines.EmailValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import ru.poly.studentstestingsystem.dto.StudentDto;
 import ru.poly.studentstestingsystem.dto.UserDto;
-import ru.poly.studentstestingsystem.entity.Course;
-import ru.poly.studentstestingsystem.entity.Group;
-import ru.poly.studentstestingsystem.entity.Student;
-import ru.poly.studentstestingsystem.entity.Teacher;
-import ru.poly.studentstestingsystem.entity.User;
+import ru.poly.studentstestingsystem.entity.*;
 import ru.poly.studentstestingsystem.entity.enumeration.RoleEnum;
 import ru.poly.studentstestingsystem.excelhandler.ExcelStudentsReader;
 import ru.poly.studentstestingsystem.exception.StudentConstraintException;
@@ -25,26 +14,30 @@ import ru.poly.studentstestingsystem.exception.StudentNotFoundException;
 import ru.poly.studentstestingsystem.mapper.StudentMapper;
 import ru.poly.studentstestingsystem.parser.StudentUsernameParser;
 import ru.poly.studentstestingsystem.pojo.request.SignUpRequest;
-import ru.poly.studentstestingsystem.repository.CourseRepository;
-import ru.poly.studentstestingsystem.repository.GroupRepository;
-import ru.poly.studentstestingsystem.repository.StudentRepository;
-import ru.poly.studentstestingsystem.repository.TeacherRepository;
-import ru.poly.studentstestingsystem.repository.UserRepository;
+import ru.poly.studentstestingsystem.repository.*;
 import ru.poly.studentstestingsystem.service.AuthService;
 import ru.poly.studentstestingsystem.service.StudentService;
 import ru.poly.studentstestingsystem.vo.StudentUsernameValues;
+
+import javax.transaction.Transactional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class StudentServiceImpl implements StudentService {
 
     private static final String STUDENT_NOT_FOUND_MESSAGE = "Студент с id %s не найден!";
 
-    private static final String STUDENT_INVALID_EMAIL =
+    private static final String STUDENT_INVALID_EMAIL_MESSAGE =
             "Студент с невалидным email: %s!" + " Пожалуйста, введите корректный email";
 
-    private static final String STUDENT_WITH_USERNAME_EXISTS = "Студент с идентификатором %s уже существует!";
+    private static final String STUDENT_WITH_USERNAME_EXISTS_MESSAGE = "Студент с идентификатором %s уже существует!";
 
-    private static final String TEACHER_WITH_USERNAME_NOT_EXISTS = "Учитель с идентификатором %s не существует!";
+    private static final String TEACHER_WITH_USERNAME_NOT_EXISTS_MESSAGE =
+            "Учитель с идентификатором %s не существует!";
+
+    private static final String TEACHER_WITH_WRONG_USERNAME_MESSAGE =
+            "Учитель может добавлять студентов только со своим идентификатором! Получено: %s, но ожидалось %s";
 
     private final StudentRepository studentRepository;
 
@@ -85,12 +78,13 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     @Transactional
-    public List<StudentDto> importStudents(MultipartFile file) {
+    public List<StudentDto> importStudents(MultipartFile file, String teacherUsername) {
         List<StudentDto> studentDtos = excelStudentsReader.readExcel(file);
         List<StudentDto> savedStudentDtos = new ArrayList<>();
 
         for (StudentDto studentDto : studentDtos) {
             StudentUsernameValues studentUsernameValues = getStudentUsernameValues(studentDto);
+            validateTeacherUsername(teacherUsername, studentUsernameValues.getTeacherUsername());
             Student student = studentMapper.map(studentDto);
             validateStudent(student);
 
@@ -112,6 +106,13 @@ public class StudentServiceImpl implements StudentService {
         return savedStudentDtos;
     }
 
+    private void validateTeacherUsername(String teacherUsernameFromRequest, String teacherUsernameFromStudent) {
+        if (!teacherUsernameFromRequest.equals(teacherUsernameFromStudent)) {
+            throw new StudentConstraintException(String.format(TEACHER_WITH_WRONG_USERNAME_MESSAGE,
+                    teacherUsernameFromStudent, teacherUsernameFromRequest));
+        }
+    }
+
     private void validateStudent(Student student) {
         String username = student.getUser().getUsername();
         validateStudentUsername(username);
@@ -122,13 +123,13 @@ public class StudentServiceImpl implements StudentService {
 
     private void validateStudentUsername(String username) {
         if (userRepository.existsByUsername(username)) {
-            throw new StudentConstraintException(String.format(STUDENT_WITH_USERNAME_EXISTS, username));
+            throw new StudentConstraintException(String.format(STUDENT_WITH_USERNAME_EXISTS_MESSAGE, username));
         }
     }
 
     private void validateStudentEmail(String email) {
         if (!EmailValidator.getInstance().isValid(email)) {
-            throw new StudentConstraintException(String.format(STUDENT_INVALID_EMAIL, email));
+            throw new StudentConstraintException(String.format(STUDENT_INVALID_EMAIL_MESSAGE, email));
         }
     }
 
@@ -161,7 +162,8 @@ public class StudentServiceImpl implements StudentService {
 
     private Teacher getTeacher(String teacherUsername) {
         Optional<Teacher> teacherOptional = teacherRepository.findTeacherByUser_Username(teacherUsername);
-        return teacherOptional.orElseThrow(() -> new StudentConstraintException(TEACHER_WITH_USERNAME_NOT_EXISTS));
+        return teacherOptional.orElseThrow(() -> new StudentConstraintException(
+                String.format(TEACHER_WITH_USERNAME_NOT_EXISTS_MESSAGE, teacherUsername)));
     }
 
     private SignUpRequest getSignUpRequest(UserDto userDto) {
