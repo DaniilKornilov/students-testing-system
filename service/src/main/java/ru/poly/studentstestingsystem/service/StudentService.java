@@ -1,9 +1,8 @@
 package ru.poly.studentstestingsystem.service;
 
+import java.util.List;
 import org.springframework.web.multipart.MultipartFile;
 import ru.poly.studentstestingsystem.dto.StudentDto;
-
-import java.util.List;
 
 public interface StudentService {
 

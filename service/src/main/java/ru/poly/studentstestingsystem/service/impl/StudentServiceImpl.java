@@ -1,12 +1,23 @@
 package ru.poly.studentstestingsystem.service.impl;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
+import javax.transaction.Transactional;
 import org.apache.commons.validator.routines.EmailValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import ru.poly.studentstestingsystem.dto.StudentDto;
 import ru.poly.studentstestingsystem.dto.UserDto;
-import ru.poly.studentstestingsystem.entity.*;
+import ru.poly.studentstestingsystem.entity.Course;
+import ru.poly.studentstestingsystem.entity.Group;
+import ru.poly.studentstestingsystem.entity.Student;
+import ru.poly.studentstestingsystem.entity.Teacher;
+import ru.poly.studentstestingsystem.entity.User;
 import ru.poly.studentstestingsystem.entity.enumeration.RoleEnum;
 import ru.poly.studentstestingsystem.excelhandler.ExcelStudentsReader;
 import ru.poly.studentstestingsystem.exception.StudentConstraintException;
@@ -14,14 +25,14 @@ import ru.poly.studentstestingsystem.exception.StudentNotFoundException;
 import ru.poly.studentstestingsystem.mapper.StudentMapper;
 import ru.poly.studentstestingsystem.parser.StudentUsernameParser;
 import ru.poly.studentstestingsystem.pojo.request.SignUpRequest;
-import ru.poly.studentstestingsystem.repository.*;
+import ru.poly.studentstestingsystem.repository.CourseRepository;
+import ru.poly.studentstestingsystem.repository.GroupRepository;
+import ru.poly.studentstestingsystem.repository.StudentRepository;
+import ru.poly.studentstestingsystem.repository.TeacherRepository;
+import ru.poly.studentstestingsystem.repository.UserRepository;
 import ru.poly.studentstestingsystem.service.AuthService;
 import ru.poly.studentstestingsystem.service.StudentService;
 import ru.poly.studentstestingsystem.vo.StudentUsernameValues;
-
-import javax.transaction.Transactional;
-import java.util.*;
-import java.util.stream.Collectors;
 
 @Service
 public class StudentServiceImpl implements StudentService {
