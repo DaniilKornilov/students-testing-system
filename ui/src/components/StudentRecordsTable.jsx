@@ -7,19 +7,25 @@ const columns = [
   {
     field: 'name',
     headerName: 'Имя студента',
-    minWidth: 485,
+    minWidth: 375,
+    sortable: false,
+  },
+  {
+    field: 'username',
+    headerName: 'Идентификатор студента',
+    minWidth: 375,
     sortable: false,
   },
   {
     field: 'email',
     headerName: 'Email студента',
-    minWidth: 485,
+    minWidth: 375,
     sortable: false,
   },
   {
     field: 'group',
     headerName: 'Группа студента',
-    minWidth: 485,
+    minWidth: 375,
     sortable: false,
   },
 ];
@@ -29,8 +35,9 @@ function StudentRecordsTable(props) {
 
   const rows = students ? students.map((s) => ({
     id: s.id,
-    name: s.name,
-    email: s.email,
+    name: `${s.firstName} ${s.lastName}`,
+    username: s.userDto.username,
+    email: s.userDto.email,
     group: s.groupDto.name,
   })) : [];
 
@@ -65,8 +72,9 @@ function StudentRecordsTable(props) {
 StudentRecordsTable.propTypes = {
   students: PropTypes.arrayOf(PropTypes.shape({
     id: PropTypes.number,
-    name: PropTypes.string,
-    email: PropTypes.string,
+    firstName: PropTypes.string,
+    lastName: PropTypes.string,
+    userDto: PropTypes.shape({ name: PropTypes.string, email: PropTypes.string }),
     groupDto: PropTypes.shape({ name: PropTypes.string }),
   })).isRequired,
 };

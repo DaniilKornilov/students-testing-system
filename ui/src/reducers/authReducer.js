@@ -11,8 +11,8 @@ export default function authReducer(state = { user: null }, action = {}) {
       return {
         ...state,
         user: {
-          phoneNumber: payload.phoneNumber,
-          userId: payload.userId,
+          subject: payload.subject,
+          authorities: payload.authorities,
           token: payload.token,
         },
       };

@@ -16,7 +16,7 @@ function Login(props) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (username.length >= 18 || username.length <= 2) {
+    if (username.length > 20 || username.length <= 1) {
       setErrorOpen(true);
       setErrorMessage('Введите корректное имя пользователя');
       return;
@@ -26,9 +26,9 @@ function Login(props) {
       setErrorMessage('Введите пароль');
       return;
     }
-    if (password.length < 4) {
+    if (password.length < 6) {
       setErrorOpen(true);
-      setErrorMessage('Длина пароля должна быть не менее 4-х символов');
+      setErrorMessage('Длина пароля должна быть не менее 6 символов');
       return;
     }
 

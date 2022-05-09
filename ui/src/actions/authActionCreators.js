@@ -1,10 +1,10 @@
 import { SIGN_IN, SIGN_OUT } from './types';
 
-export const userSignIn = (phoneNumber, userId, token) => ({
+export const userSignIn = (subject, authorities, token) => ({
   type: SIGN_IN,
   payload: {
-    phoneNumber,
-    userId,
+    subject,
+    authorities,
     token,
   },
 });

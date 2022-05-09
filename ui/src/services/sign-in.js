@@ -12,8 +12,8 @@ export default function signIn(username, password) {
     .then((response) => {
       if (response.data.token) {
         store.dispatch(userSignIn(
-          response.data.username,
-          response.data.id,
+          response.data.subject,
+          response.data.authorities,
           response.data.token,
         ));
       }
