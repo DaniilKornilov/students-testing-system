@@ -126,7 +126,7 @@ function HomeImpl() {
             <Button
               component="span"
               variant="contained"
-              endIcon={<FileUploadIcon/>}
+              endIcon={<FileUploadIcon />}
               color="primary"
             >
               Импорт
@@ -164,7 +164,7 @@ function HomeImpl() {
             id="clearButton"
             variant="contained"
             onClick={handleClearFilters}
-            endIcon={<CancelOutlinedIcon/>}
+            endIcon={<CancelOutlinedIcon />}
             color="primary"
           >
             Сбросить фильтр
