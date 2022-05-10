@@ -3,6 +3,8 @@ package ru.poly.studentstestingsystem.excelhandler;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
 import org.apache.poi.ss.usermodel.Cell;
@@ -30,6 +32,17 @@ public class ExcelTestsReader {
 
     private static final String CELL_VALUE_ERROR_MESSAGE = "Введите непустое значение в Excel файле! Номер строки: %d" +
             "Номер столбца: %d";
+
+    private static final String TIME_LIMIT_ERROR_MESSAGE = "Введите время в формате Ч:мм! Номер строки: %d" +
+            "Номер столбца: %d";
+
+    private static final String DATE_TIME_ERROR_MESSAGE =
+            "Введите дату и время в формате дд.ММ.гггг ЧЧ:мм! Номер строки: %d" +
+                    "Номер столбца: %d";
+
+    private static final String DATE_TIME_SEQUENCE_ERROR_MESSAGE =
+            "Время закрытия теста не должно быть раньше времени начала теста! Номер строки: %d" +
+                    "Номер столбца: %d";
 
     private final DataFormatter dataFormatter = new DataFormatter();
 
@@ -107,12 +120,35 @@ public class ExcelTestsReader {
             case ExcelTestsConstants.TEST_NAME_INDEX -> testDto.setName(cellValue);
             case ExcelTestsConstants.TEST_DESCRIPTION_INDEX -> testDto.setDescription(cellValue);
             case ExcelTestsConstants.TEST_TIME_LIMIT_INDEX -> {
-//                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
-                testDto.setTimeLimit(LocalTime.parse(cellValue));
+                try {
+                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern(ExcelTestsConstants.TIME_FORMAT);
+                    testDto.setTimeLimit(LocalTime.parse(cellValue, formatter));
+                } catch (DateTimeParseException exception) {
+                    throw new ExcelReadingException(
+                            String.format(TIME_LIMIT_ERROR_MESSAGE, row.getRowNum() + 1, index));
+                }
+
             }
-            case ExcelTestsConstants.TEST_AVAILABLE_FROM_INDEX ->
-                    testDto.setAvailableFrom(LocalDateTime.parse(cellValue));
-            case ExcelTestsConstants.TEST_AVAILABLE_TO_INDEX -> testDto.setAvailableTo(LocalDateTime.parse(cellValue));
+            case ExcelTestsConstants.TEST_AVAILABLE_FROM_INDEX -> {
+                try {
+                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern(ExcelTestsConstants.DATE_TIME_FORMAT);
+                    testDto.setAvailableFrom(LocalDateTime.parse(cellValue, formatter));
+                } catch (DateTimeParseException exception) {
+                    throw new ExcelReadingException(String.format(DATE_TIME_ERROR_MESSAGE, row.getRowNum() + 1, index));
+                }
+            }
+            case ExcelTestsConstants.TEST_AVAILABLE_TO_INDEX -> {
+                try {
+                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern(ExcelTestsConstants.DATE_TIME_FORMAT);
+                    testDto.setAvailableTo(LocalDateTime.parse(cellValue, formatter));
+                    if (testDto.getAvailableFrom().isAfter(testDto.getAvailableTo())) {
+                        throw new ExcelReadingException(
+                                String.format(DATE_TIME_SEQUENCE_ERROR_MESSAGE, row.getRowNum() + 1, index));
+                    }
+                } catch (DateTimeParseException exception) {
+                    throw new ExcelReadingException(String.format(DATE_TIME_ERROR_MESSAGE, row.getRowNum() + 1, index));
+                }
+            }
         }
     }
 

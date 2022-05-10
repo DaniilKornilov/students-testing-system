@@ -21,5 +21,9 @@ public class ExcelTestsConstants {
 
     public static final int TEST_AVAILABLE_TO_INDEX = 4;
 
+    public static final String DATE_TIME_FORMAT = "M/d/yy H:mm";
+
+    public static final String TIME_FORMAT = "H:mm";
+
     public static final List<String> TASK_ROWS = List.of("Задание:", "Описание", "Изображения", "Ответы");
 }
