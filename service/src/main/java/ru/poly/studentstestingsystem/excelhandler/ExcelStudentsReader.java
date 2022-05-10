@@ -6,7 +6,6 @@ import java.util.List;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.DataFormatter;
 import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Row.MissingCellPolicy;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -16,12 +15,11 @@ import ru.poly.studentstestingsystem.dto.StudentDto;
 import ru.poly.studentstestingsystem.dto.UserDto;
 import ru.poly.studentstestingsystem.excelhandler.constants.ExcelConstants;
 import ru.poly.studentstestingsystem.excelhandler.constants.ExcelStudentsConstants;
+import ru.poly.studentstestingsystem.excelhandler.excelutils.ExcelUtils;
 import ru.poly.studentstestingsystem.exception.ExcelReadingException;
 
 @Component
 public class ExcelStudentsReader {
-
-    private static final String EXCEL_READING_ERROR_MESSAGE = "Excel файл не валиден!";
 
     private static final String STUDENTS_HEADERS_ERROR_MESSAGE =
             "Excel файл имеет неверные колонки! Номер колонки: %d" +
@@ -35,13 +33,13 @@ public class ExcelStudentsReader {
 
     public List<StudentDto> readExcel(MultipartFile file) {
         if (!ExcelConstants.TYPE.equals(file.getContentType())) {
-            throw new ExcelReadingException(EXCEL_READING_ERROR_MESSAGE);
+            throw new ExcelReadingException(ExcelConstants.EXCEL_FORMAT_ERROR_MESSAGE);
         }
         try (Workbook workbook = new XSSFWorkbook(file.getInputStream())) {
             Sheet sheet = getSheet(workbook);
             return readStudentsFromSheet(sheet);
         } catch (IOException exception) {
-            throw new ExcelReadingException(EXCEL_READING_ERROR_MESSAGE);
+            throw new ExcelReadingException(ExcelConstants.EXCEL_READING_ERROR_MESSAGE);
         }
     }
 
@@ -72,7 +70,7 @@ public class ExcelStudentsReader {
 
         for (int i = ExcelStudentsConstants.HEADERS_ROW_INDEX + 1; i <= sheet.getLastRowNum(); i++) {
             Row row = sheet.getRow(i);
-            if (isNotEmptyRow(row)) {
+            if (ExcelUtils.isNotEmptyRow(row)) {
                 StudentDto studentDto = new StudentDto();
                 UserDto userDto = new UserDto();
                 studentDto.setUserDto(userDto);
@@ -143,21 +141,5 @@ public class ExcelStudentsReader {
                     row.getRowNum()));
         }
         studentDto.getUserDto().setPassword(cellValue);
-    }
-
-    private boolean isNotEmptyRow(Row row) {
-        if (row == null) {
-            return false;
-        }
-        if (row.getLastCellNum() <= 0) {
-            return false;
-        }
-        for (int i = row.getFirstCellNum(); i < row.getLastCellNum(); i++) {
-            Cell cell = row.getCell(i, MissingCellPolicy.RETURN_BLANK_AS_NULL);
-            if (cell != null) {
-                return true;
-            }
-        }
-        return false;
     }
 }

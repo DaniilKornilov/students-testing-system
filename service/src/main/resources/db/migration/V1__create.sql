@@ -106,6 +106,8 @@ create table teacher
 create table test
 (
     id                int8         not null,
+    available_from    timestamp    not null,
+    available_to      timestamp    not null,
     created_timestamp timestamp    not null,
     description       TEXT         not null,
     name              varchar(255) not null,

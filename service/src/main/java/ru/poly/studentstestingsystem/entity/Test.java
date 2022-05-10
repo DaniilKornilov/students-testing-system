@@ -55,6 +55,12 @@ public class Test {
     @Column(name = "time_limit")
     private LocalTime timeLimit;
 
+    @Column(name = "available_from", nullable = false)
+    private LocalDateTime availableFrom;
+
+    @Column(name = "available_to", nullable = false)
+    private LocalDateTime availableTo;
+
     @ManyToOne
     @JoinColumn(name = "course_id", foreignKey = @ForeignKey(name = "test_course_fk"), nullable = false)
     private Course course;
