@@ -5,5 +5,5 @@ import ru.poly.studentstestingsystem.dto.TestDto;
 
 public interface TestService {
 
-    TestDto importTest(MultipartFile multipartFile);
+    TestDto importTest(MultipartFile multipartFile, String courseName);
 }

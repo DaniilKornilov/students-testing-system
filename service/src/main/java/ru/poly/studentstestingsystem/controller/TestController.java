@@ -23,7 +23,7 @@ public class TestController {
     }
 
     @PostMapping
-    public TestDto importTest(@RequestParam MultipartFile file) {
-        return testService.importTest(file);
+    public TestDto importTest(@RequestParam MultipartFile file, @RequestParam String courseName) {
+        return testService.importTest(file, courseName);
     }
 }
