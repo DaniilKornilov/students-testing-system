@@ -1,6 +1,6 @@
 package ru.poly.studentstestingsystem.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,14 +13,10 @@ import ru.poly.studentstestingsystem.service.TestService;
 @RestController
 @RequestMapping(path = "api/test")
 @PreAuthorize("hasRole('TEACHER')")
+@RequiredArgsConstructor
 public class TestController {
 
     private final TestService testService;
-
-    @Autowired
-    public TestController(TestService testService) {
-        this.testService = testService;
-    }
 
     @PostMapping
     public TestDto importTest(@RequestParam MultipartFile file, @RequestParam String courseName) {

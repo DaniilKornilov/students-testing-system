@@ -40,15 +40,15 @@ create table groups
 );
 create table image
 (
-    id      int8         not null,
-    path    varchar(255) not null,
-    task_id int8         not null,
+    id          int8  not null,
+    image_bytes BYTEA not null,
+    task_id     int8  not null,
     primary key (id)
 );
 create table role
 (
-    id             int8 not null,
-    role_enum_name varchar(255),
+    id             int8         not null,
+    role_enum_name varchar(255) not null,
     primary key (id)
 );
 create table student
@@ -134,6 +134,10 @@ alter table if exists course
     add constraint course_name_uk unique (name);
 alter table if exists groups
     add constraint group_name_uk unique (name);
+alter table if exists task
+    add constraint task_name_uk unique (name);
+alter table if exists test
+    add constraint test_name_uk unique (name);
 alter table if exists users
     add constraint username_uk unique (username);
 alter table if exists answer

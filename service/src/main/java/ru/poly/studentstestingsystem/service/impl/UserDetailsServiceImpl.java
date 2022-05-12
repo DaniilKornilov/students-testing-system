@@ -1,7 +1,7 @@
 package ru.poly.studentstestingsystem.service.impl;
 
 import javax.transaction.Transactional;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -10,16 +10,12 @@ import ru.poly.studentstestingsystem.entity.User;
 import ru.poly.studentstestingsystem.repository.UserRepository;
 
 @Service
+@RequiredArgsConstructor
 public class UserDetailsServiceImpl implements UserDetailsService {
 
     private static final String USER_NOT_FOUND_MESSAGE = "Пользователь с именем: %s не найден!";
 
     private final UserRepository userRepository;
-
-    @Autowired
-    public UserDetailsServiceImpl(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
 
     @Override
     @Transactional

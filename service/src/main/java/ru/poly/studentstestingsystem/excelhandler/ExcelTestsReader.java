@@ -10,7 +10,6 @@ import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 import java.util.stream.StreamSupport;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
@@ -28,6 +27,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 import ru.poly.studentstestingsystem.dto.AnswerDto;
+import ru.poly.studentstestingsystem.dto.ImageDto;
 import ru.poly.studentstestingsystem.dto.TaskDto;
 import ru.poly.studentstestingsystem.dto.TestDto;
 import ru.poly.studentstestingsystem.excelhandler.constants.ExcelConstants;
@@ -41,7 +41,7 @@ import ru.poly.studentstestingsystem.vo.TestAnswerValues;
 public class ExcelTestsReader {
 
     private static final String TEST_ROWS_ERROR_MESSAGE =
-            "Excel файл имеет неверные строки! Номер строки: %d Получено: %s" + "Ожидалось: %s";
+            "Excel файл имеет неверные строки! Номер строки: %d Получено: %s Ожидалось: %s";
 
     private static final String CELL_VALUE_ERROR_MESSAGE =
             "Введите непустое значение в Excel файле! Номер строки: %d Номер столбца: 2";
@@ -68,7 +68,7 @@ public class ExcelTestsReader {
 
     private List<AnswerDto> answerDtos;
 
-    private List<ExcelImage> excelImages;
+    private List<ImageDto> excelImages;
 
     private int currentTaskRowIndex;
 
@@ -230,12 +230,12 @@ public class ExcelTestsReader {
                 .map(this::toMapEntry)
                 .collect(toMap(Pair::getKey, Pair::getValue));
 
-        List<ExcelImage> images = StreamSupport.stream(sheet.spliterator(), false)
+        List<ImageDto> images = StreamSupport.stream(sheet.spliterator(), false)
                 .filter(this::isCurrentRow)
-                .map(r -> new ExcelImage(
-                        UUID.randomUUID().toString(),
-                        imageByLocations.get(r.getRowNum()),
-                        currentTaskDto.toBuilder().build()))
+                .map(r -> new ImageDto(
+                        0L,
+                        currentTaskDto.toBuilder().build(),
+                        imageByLocations.get(r.getRowNum())))
                 .toList();
         excelImages.addAll(images);
     }
@@ -273,7 +273,7 @@ public class ExcelTestsReader {
         return answerDtos;
     }
 
-    public List<ExcelImage> getExcelImages() {
+    public List<ImageDto> getExcelImages() {
         return excelImages;
     }
 

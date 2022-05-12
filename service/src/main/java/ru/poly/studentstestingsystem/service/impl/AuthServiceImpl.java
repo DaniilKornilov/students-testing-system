@@ -2,7 +2,7 @@ package ru.poly.studentstestingsystem.service.impl;
 
 import java.util.HashSet;
 import java.util.Set;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import ru.poly.studentstestingsystem.entity.Role;
@@ -15,6 +15,7 @@ import ru.poly.studentstestingsystem.repository.UserRepository;
 import ru.poly.studentstestingsystem.service.AuthService;
 
 @Service
+@RequiredArgsConstructor
 public class AuthServiceImpl implements AuthService {
 
     private static final String USERNAME_TAKEN_MESSAGE = "Ошибка! имя пользователя: %s уже занято";
@@ -27,15 +28,6 @@ public class AuthServiceImpl implements AuthService {
     private final PasswordEncoder passwordEncoder;
 
     private final RoleRepository roleRepository;
-
-    @Autowired
-    public AuthServiceImpl(UserRepository userRepository,
-            PasswordEncoder passwordEncoder,
-            RoleRepository roleRepository) {
-        this.userRepository = userRepository;
-        this.passwordEncoder = passwordEncoder;
-        this.roleRepository = roleRepository;
-    }
 
     @Override
     public User registerUser(SignUpRequest signUpRequest) {

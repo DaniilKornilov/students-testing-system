@@ -1,6 +1,5 @@
 package ru.poly.studentstestingsystem.entity;
 
-import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.ForeignKey;
@@ -11,7 +10,9 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -22,8 +23,11 @@ import lombok.ToString;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
+@EqualsAndHashCode
 @Entity
-@Table
+@Table(uniqueConstraints = {
+        @UniqueConstraint(columnNames = "name", name = "task_name_uk"),
+})
 public class Task {
 
     @Id
@@ -47,23 +51,4 @@ public class Task {
     @ManyToOne
     @JoinColumn(name = "test_id", foreignKey = @ForeignKey(name = "task_test_fk"), nullable = false)
     private Test test;
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (!(o instanceof Task task)) {
-            return false;
-        }
-        return getId() == task.getId() &&
-                getName().equals(task.getName()) &&
-                getDescription().equals(task.getDescription()) &&
-                getTest().equals(task.getTest());
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(getId(), getName(), getDescription(), getTest());
-    }
 }

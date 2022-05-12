@@ -1,7 +1,7 @@
 package ru.poly.studentstestingsystem.controller;
 
 import java.util.List;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -16,14 +16,10 @@ import ru.poly.studentstestingsystem.service.StudentService;
 @RestController
 @RequestMapping(path = "api/student")
 @PreAuthorize("hasRole('TEACHER') or hasRole('ADMIN')")
+@RequiredArgsConstructor
 public class StudentController {
 
     private final StudentService studentService;
-
-    @Autowired
-    public StudentController(StudentService studentService) {
-        this.studentService = studentService;
-    }
 
     @GetMapping
     public List<StudentDto> getStudents() {

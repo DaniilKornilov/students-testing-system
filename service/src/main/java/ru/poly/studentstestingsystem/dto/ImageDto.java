@@ -1,5 +1,6 @@
 package ru.poly.studentstestingsystem.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -7,11 +8,12 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
 public class ImageDto {
 
     private long id;
 
     private TaskDto taskDto;
 
-    private String path;
+    private byte[] imageBytes;
 }

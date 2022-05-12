@@ -7,8 +7,8 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 import javax.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
 import org.apache.commons.validator.routines.EmailValidator;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import ru.poly.studentstestingsystem.dto.StudentDto;
@@ -35,6 +35,7 @@ import ru.poly.studentstestingsystem.service.StudentService;
 import ru.poly.studentstestingsystem.vo.StudentUsernameValues;
 
 @Service
+@RequiredArgsConstructor
 public class StudentServiceImpl implements StudentService {
 
     private static final String STUDENT_NOT_FOUND_MESSAGE = "Студент с id %s не найден!";
@@ -54,25 +55,19 @@ public class StudentServiceImpl implements StudentService {
 
     private final StudentMapper studentMapper;
 
-    private ExcelStudentsReader excelStudentsReader;
+    private final ExcelStudentsReader excelStudentsReader;
 
-    private GroupRepository groupRepository;
+    private final GroupRepository groupRepository;
 
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
-    private CourseRepository courseRepository;
+    private final CourseRepository courseRepository;
 
-    private TeacherRepository teacherRepository;
+    private final TeacherRepository teacherRepository;
 
-    private StudentUsernameParser studentUsernameParser;
+    private final StudentUsernameParser studentUsernameParser;
 
-    private AuthService authService;
-
-    @Autowired
-    public StudentServiceImpl(StudentRepository studentRepository, StudentMapper studentMapper) {
-        this.studentRepository = studentRepository;
-        this.studentMapper = studentMapper;
-    }
+    private final AuthService authService;
 
     @Override
     public StudentDto getStudentById(long id) {
@@ -197,40 +192,5 @@ public class StudentServiceImpl implements StudentService {
         return studentDtos.stream()
                 .map(studentMapper::map)
                 .collect(Collectors.toList());
-    }
-
-    @Autowired
-    public void setExcelStudentsReader(ExcelStudentsReader excelStudentsReader) {
-        this.excelStudentsReader = excelStudentsReader;
-    }
-
-    @Autowired
-    public void setGroupRepository(GroupRepository groupRepository) {
-        this.groupRepository = groupRepository;
-    }
-
-    @Autowired
-    public void setStudentUsernameParser(StudentUsernameParser studentUsernameParser) {
-        this.studentUsernameParser = studentUsernameParser;
-    }
-
-    @Autowired
-    public void setUserRepository(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
-
-    @Autowired
-    public void setCourseRepository(CourseRepository courseRepository) {
-        this.courseRepository = courseRepository;
-    }
-
-    @Autowired
-    public void setTeacherRepository(TeacherRepository teacherRepository) {
-        this.teacherRepository = teacherRepository;
-    }
-
-    @Autowired
-    public void setAuthService(AuthService authService) {
-        this.authService = authService;
     }
 }

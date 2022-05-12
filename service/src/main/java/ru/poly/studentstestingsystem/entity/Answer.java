@@ -1,6 +1,5 @@
 package ru.poly.studentstestingsystem.entity;
 
-import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.ForeignKey;
@@ -12,6 +11,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -22,6 +22,7 @@ import lombok.ToString;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
+@EqualsAndHashCode
 @Entity
 @Table
 public class Answer {
@@ -47,23 +48,4 @@ public class Answer {
 
     @Column(nullable = false)
     private String name;
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (!(o instanceof Answer answer)) {
-            return false;
-        }
-        return getId() == answer.getId() &&
-                Double.compare(answer.getValue(), getValue()) == 0 &&
-                getTask().equals(answer.getTask()) &&
-                getName().equals(answer.getName());
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(getId(), getTask(), getValue(), getName());
-    }
 }

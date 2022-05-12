@@ -2,7 +2,7 @@ package ru.poly.studentstestingsystem.service.impl;
 
 import java.util.List;
 import java.util.stream.Collectors;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.poly.studentstestingsystem.dto.GroupDto;
 import ru.poly.studentstestingsystem.exception.StudentNotFoundException;
@@ -11,6 +11,7 @@ import ru.poly.studentstestingsystem.repository.GroupRepository;
 import ru.poly.studentstestingsystem.service.GroupService;
 
 @Service
+@RequiredArgsConstructor
 public class GroupServiceImpl implements GroupService {
 
     private static final String GROUP_NOT_FOUND_MESSAGE = "Группа с id %s не найдена!";
@@ -18,12 +19,6 @@ public class GroupServiceImpl implements GroupService {
     private final GroupRepository groupRepository;
 
     private final GroupMapper groupMapper;
-
-    @Autowired
-    public GroupServiceImpl(GroupRepository groupRepository, GroupMapper groupMapper) {
-        this.groupRepository = groupRepository;
-        this.groupMapper = groupMapper;
-    }
 
     @Override
     public List<GroupDto> getGroups() {

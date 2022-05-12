@@ -1,7 +1,6 @@
 package ru.poly.studentstestingsystem.entity;
 
 import java.util.HashSet;
-import java.util.Objects;
 import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -18,6 +17,7 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -28,6 +28,7 @@ import lombok.ToString;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
+@EqualsAndHashCode
 @Entity
 @Table(uniqueConstraints = {
         @UniqueConstraint(columnNames = "name", name = "course_name_uk"),
@@ -58,23 +59,4 @@ public class Course {
             joinColumns = @JoinColumn(name = "course_id", foreignKey = @ForeignKey(name = "course_group_fk")),
             inverseJoinColumns = @JoinColumn(name = "group_id", foreignKey = @ForeignKey(name = "group_course_fk")))
     private Set<Group> groups = new HashSet<>();
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (!(o instanceof Course course)) {
-            return false;
-        }
-        return getId() == course.getId() &&
-                getName().equals(course.getName()) &&
-                Objects.equals(getTeacher(), course.getTeacher()) &&
-                Objects.equals(getGroups(), course.getGroups());
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(getId(), getName(), getTeacher(), getGroups());
-    }
 }

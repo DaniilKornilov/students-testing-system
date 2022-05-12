@@ -1,7 +1,7 @@
 package ru.poly.studentstestingsystem.service.impl;
 
 import javax.transaction.Transactional;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.poly.studentstestingsystem.dto.TeacherDto;
 import ru.poly.studentstestingsystem.entity.Teacher;
@@ -15,6 +15,7 @@ import ru.poly.studentstestingsystem.service.AuthService;
 import ru.poly.studentstestingsystem.service.TeacherService;
 
 @Service
+@RequiredArgsConstructor
 public class TeacherServiceImpl implements TeacherService {
 
     private final AuthService authService;
@@ -24,17 +25,6 @@ public class TeacherServiceImpl implements TeacherService {
     private final SignUpRequestMapper signUpRequestMapper;
 
     private final TeacherMapper teacherMapper;
-
-    @Autowired
-    public TeacherServiceImpl(AuthService authService,
-            TeacherRepository teacherRepository,
-            SignUpRequestMapper signUpRequestMapper,
-            TeacherMapper teacherMapper) {
-        this.authService = authService;
-        this.teacherRepository = teacherRepository;
-        this.signUpRequestMapper = signUpRequestMapper;
-        this.teacherMapper = teacherMapper;
-    }
 
     @Override
     @Transactional

@@ -2,7 +2,6 @@ package ru.poly.studentstestingsystem.entity;
 
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.ForeignKey;
@@ -13,7 +12,9 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -24,8 +25,11 @@ import lombok.ToString;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
+@EqualsAndHashCode
 @Entity
-@Table
+@Table(uniqueConstraints = {
+        @UniqueConstraint(columnNames = "name", name = "test_name_uk"),
+})
 public class Test {
 
     @Id
@@ -64,27 +68,4 @@ public class Test {
     @ManyToOne
     @JoinColumn(name = "course_id", foreignKey = @ForeignKey(name = "test_course_fk"), nullable = false)
     private Course course;
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (!(o instanceof Test test)) {
-            return false;
-        }
-        return getId() == test.getId() &&
-                getName().equals(test.getName()) &&
-                getDescription().equals(test.getDescription()) &&
-                getCreatedTimestamp().equals(test.getCreatedTimestamp()) &&
-                getUpdatedTimestamp().equals(test.getUpdatedTimestamp()) &&
-                getTimeLimit().equals(test.getTimeLimit()) &&
-                getCourse().equals(test.getCourse());
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(getId(), getName(), getDescription(), getCreatedTimestamp(), getUpdatedTimestamp(),
-                getTimeLimit(), getCourse());
-    }
 }
