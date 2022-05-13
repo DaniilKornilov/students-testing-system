@@ -2,6 +2,7 @@ package ru.poly.studentstestingsystem.service.impl;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 import javax.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -54,6 +55,20 @@ public class TestServiceImpl implements TestService {
     private final AnswerMapper answerMapper;
 
     private final ImageMapper imageMapper;
+
+    @Override
+    public List<TestDto> getTests() {
+        return testRepository.findAll().stream()
+                .map(testMapper::map)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<TestDto> getTestsByCourseName(String courseName) {
+        return testRepository.findTestsByCourse_Name(courseName).stream()
+                .map(testMapper::map)
+                .collect(Collectors.toList());
+    }
 
     @Override
     @Transactional
