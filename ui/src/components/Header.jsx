@@ -9,15 +9,14 @@ import Button from '@mui/material/Button';
 import {
   Avatar, Box, Tooltip,
 } from '@mui/material';
-import PropTypes from 'prop-types';
 import Collapse from '@mui/material/Collapse';
-import { withRouter } from 'react-router-dom';
+import { useHistory, withRouter } from 'react-router-dom';
 import store from '../store';
 import getUser from '../services/get-user';
 import signOut from '../services/sign-out';
 
-function Header(props) {
-  const { history } = props;
+function Header() {
+  const history = useHistory();
   const [anchorElUser, setAnchorElUser] = useState(null);
   const [isOpen, setIsOpen] = useState(false);
 
@@ -155,9 +154,5 @@ function Header(props) {
     </AppBar>
   );
 }
-
-Header.propTypes = {
-  history: PropTypes.shape({ push: PropTypes.func }).isRequired,
-};
 
 export default withRouter(Header);

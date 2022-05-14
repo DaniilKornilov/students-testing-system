@@ -12,7 +12,6 @@ import {
 } from '@mui/material';
 import MenuItem from '@mui/material/MenuItem';
 import CancelOutlinedIcon from '@mui/icons-material/CancelOutlined';
-import PropTypes from 'prop-types';
 import authHeader from '../services/auth-header';
 import getUser from '../services/get-user';
 import TestRecordsTable from '../components/TestRecordsTable';
@@ -188,18 +187,11 @@ function TestsImpl() {
   );
 }
 
-TestsImpl.propTypes = {
-  history: PropTypes.shape({
-    push: PropTypes.func,
-    location: PropTypes.shape({ name: PropTypes.string }),
-  }).isRequired,
-};
-
-function Tests(history) {
+function Tests() {
   if (!getUser()) {
     return <Redirect to="/signIn" />;
   }
-  return <TestsImpl history={history} />;
+  return <TestsImpl />;
 }
 
 export default Tests;
