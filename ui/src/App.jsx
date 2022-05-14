@@ -4,7 +4,9 @@ import {
 import React from 'react';
 import Header from './components/Header';
 import Login from './routes/Login';
-import Home from './routes/Home';
+import Students from './routes/Students';
+import Tests from './routes/Tests';
+import Courses from './routes/Courses';
 
 function App() {
   return (
@@ -14,13 +16,22 @@ function App() {
         <Route
           exact
           path="/signIn"
-          /* eslint-disable-next-line react/jsx-props-no-spreading */
-          render={(props) => <Login {...props} />}
+          render={() => <Login />}
         />
         <Route
           exact
           path="/"
-          render={() => <Home />}
+          render={() => <Students />}
+        />
+        <Route
+          exact
+          path="/tests"
+          render={() => <Tests />}
+        />
+        <Route
+          exact
+          path="/courses"
+          render={() => <Courses />}
         />
       </Switch>
     </div>

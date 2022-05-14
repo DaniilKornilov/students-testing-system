@@ -4,11 +4,11 @@ import Button from '@mui/material/Button';
 import Alert from '@mui/material/Alert';
 import Collapse from '@mui/material/Collapse';
 import Box from '@mui/material/Box';
-import PropTypes from 'prop-types';
+import { useHistory } from 'react-router-dom';
 import signIn from '../services/sign-in';
 
-function Login(props) {
-  const { history } = props;
+function Login() {
+  const history = useHistory();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [errorOpen, setErrorOpen] = useState(false);
@@ -98,9 +98,5 @@ function Login(props) {
     </Box>
   );
 }
-
-Login.propTypes = {
-  history: PropTypes.shape({ push: PropTypes.func }).isRequired,
-};
 
 export default Login;

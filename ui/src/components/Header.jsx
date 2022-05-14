@@ -43,21 +43,17 @@ function Header(props) {
   const handleSignOut = () => {
     setAnchorElUser(null);
     signOut();
-    history.push('/login');
+    history.push('/signIn');
   };
 
-  const homeItem = {
-    menuTitle: 'Главная',
-    pageURL: '/',
-  };
   const menuItems = [
     {
       menuTitle: 'Группы',
-      pageURL: '/my-groups',
+      pageURL: '/',
     },
     {
-      menuTitle: 'Тесты',
-      pageURL: '/tests',
+      menuTitle: 'Курсы',
+      pageURL: '/courses',
     },
   ];
 
@@ -74,7 +70,7 @@ function Header(props) {
     },
     {
       settingsTitle: 'Выйти',
-      pageURL: '/login',
+      pageURL: '/signIn',
       handler: handleSignOut,
     },
   ];
@@ -82,20 +78,10 @@ function Header(props) {
   return (
     <AppBar style={{ background: 'primary' }} position="static">
       <Toolbar>
-        <Button
-          id="homeButton"
-          style={{ color: '#FFFFFF' }}
-          onClick={() => handleButtonClick(homeItem.pageURL)}
-        >
-          <Typography variant="h4" sx={{ flexGrow: 1 }}>
-            {homeItem.menuTitle}
-          </Typography>
-        </Button>
-
         <Box sx={{
           flexGrow: 1,
           display: 'flex',
-          ml: 2,
+          ml: 0,
         }}
         >
           {menuItems.map((menuItem) => {
@@ -104,7 +90,7 @@ function Header(props) {
               pageURL,
             } = menuItem;
             return (
-              <Box sx={{ px: 2 }}>
+              <Box sx={{ px: 2 }} key={menuTitle}>
                 <Button
                   id={menuTitle}
                   style={{
@@ -120,7 +106,6 @@ function Header(props) {
             );
           })}
         </Box>
-
         <Box sx={{ flexGrow: 0 }}>
           <Collapse
             id="settingsCollapse"
@@ -165,7 +150,6 @@ function Header(props) {
               })}
             </Menu>
           </Collapse>
-
         </Box>
       </Toolbar>
     </AppBar>

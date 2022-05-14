@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import Box from '@mui/material/Box';
 import { TextField } from '@mui/material';
 import Button from '@mui/material/Button';
@@ -20,9 +20,7 @@ const API_URL_GROUP = 'http://localhost:8080/api/group';
 
 const API_URL_STUDENT_BY_GROUP = 'http://localhost:8080/api/student/group/?group=';
 
-const API_URL_STUDENT_IMPORT = 'http://localhost:8080/api/student';
-
-function HomeImpl() {
+function StudentsImpl() {
   const [groups, setGroups] = React.useState([]);
   const [groupComboBoxValue, setGroupComboBoxValue] = React.useState('');
   const [students, setStudents] = React.useState([]);
@@ -43,11 +41,11 @@ function HomeImpl() {
       });
   };
 
-  useEffect(() => {
+  React.useEffect(() => {
     getAllStudents();
   }, []);
 
-  useEffect(() => {
+  React.useEffect(() => {
     getAllGroups();
   }, []);
 
@@ -86,9 +84,9 @@ function HomeImpl() {
         ...authHeader(),
       },
     };
-    axios.post(API_URL_STUDENT_IMPORT, formData, config)
-      .then((res) => {
-        setStudents(res.data);
+    axios.post(API_URL_STUDENT, formData, config)
+      .then(() => {
+        getAllStudents();
         getAllGroups();
       })
       .catch(({ response }) => {
@@ -178,12 +176,12 @@ function HomeImpl() {
   );
 }
 
-function Home() {
+function Students() {
   if (!getUser()) {
     return <Redirect to="/signIn" />;
   }
 
-  return <HomeImpl />;
+  return <StudentsImpl />;
 }
 
-export default Home;
+export default Students;
