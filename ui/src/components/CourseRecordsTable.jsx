@@ -2,7 +2,7 @@ import React from 'react';
 import { Box } from '@mui/material';
 import { DataGrid } from '@mui/x-data-grid';
 import PropTypes from 'prop-types';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 const columns = [
   {
@@ -28,7 +28,7 @@ const columns = [
 
 function CourseRecordsTable(props) {
   const { courses } = props;
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const rows = courses ? courses.map((c) => ({
     id: c.id,
@@ -62,9 +62,10 @@ function CourseRecordsTable(props) {
         onRowClick={(params) => {
           const course = params.row;
           const { name } = course;
-          history.push({
-            pathname: '/tests',
-            name,
+          navigate('/tests', {
+            state: {
+              name,
+            },
           });
         }}
       />

@@ -1,4 +1,4 @@
-import { Redirect, useHistory } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import React from 'react';
 import axios from 'axios';
 import { styled } from '@mui/styles';
@@ -7,27 +7,17 @@ import Alert from '@mui/material/Alert';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import FileUploadIcon from '@mui/icons-material/FileUpload';
-import {
-  TextField,
-} from '@mui/material';
-import MenuItem from '@mui/material/MenuItem';
-import CancelOutlinedIcon from '@mui/icons-material/CancelOutlined';
 import authHeader from '../services/auth-header';
-import getUser from '../services/get-user';
 import TestRecordsTable from '../components/TestRecordsTable';
 
 const API_URL_TEST = 'http://localhost:8080/api/test';
 
-const API_URL_COURSE = 'http://localhost:8080/api/course';
-
 const API_URL_TEST_BY_COURSE = 'http://localhost:8080/api/test/course/?course=';
 
-function TestsImpl() {
-  const history = useHistory();
-  const courseName = history.location.name;
+function Tests() {
+  const { state } = useLocation();
+  const courseName = state.name;
 
-  const [courses, setCourses] = React.useState([]);
-  const [courseComboBoxValue, setCourseComboBoxValue] = React.useState('');
   const [tests, setTests] = React.useState([]);
   const [errorOpen, setErrorOpen] = React.useState(false);
   const [errorMessage, setErrorMessage] = React.useState('');
@@ -46,39 +36,9 @@ function TestsImpl() {
       });
   };
 
-  const getAllCourses = () => {
-    axios.get(API_URL_COURSE, { headers: authHeader() })
-      .then((res) => {
-        setCourses(res.data);
-      });
-  };
-
   React.useEffect(() => {
     getAllTestsByCourse(courseName);
   }, []);
-
-  React.useEffect(() => {
-    getAllCourses();
-  }, []);
-
-  const handleClearFilters = () => {
-    setErrorOpen(false);
-    setCourseComboBoxValue('');
-    getAllTests();
-  };
-
-  const handleChange = (e) => {
-    e.preventDefault();
-    setErrorOpen(false);
-    axios.get(
-      API_URL_TEST_BY_COURSE + e.target.value,
-      { headers: authHeader() },
-    )
-      .then((res) => {
-        setTests(res.data);
-      });
-    setCourseComboBoxValue(e.target.value);
-  };
 
   const Input = styled('input')({
     display: 'none',
@@ -142,56 +102,12 @@ function TestsImpl() {
             </Button>
           </label>
         </Box>
-        <Box sx={{
-          width: 1 / 4,
-          flex: 1,
-          marginTop: 3,
-        }}
-        >
-          <TextField
-            id="groupTextField"
-            select
-            label="Курс"
-            value={courseComboBoxValue}
-            onChange={handleChange}
-            helperText="Выберите курс"
-          >
-            {courses.map((course) => (
-              <MenuItem key={course.id} value={course.name}>
-                {course.name}
-              </MenuItem>
-            ))}
-          </TextField>
-        </Box>
-        <Box sx={{
-          width: 1 / 4,
-          flex: 1,
-          marginTop: 3,
-        }}
-        >
-          <Button
-            id="clearButton"
-            variant="contained"
-            onClick={handleClearFilters}
-            endIcon={<CancelOutlinedIcon />}
-            color="primary"
-          >
-            Сбросить фильтр
-          </Button>
-        </Box>
       </Box>
       <TestRecordsTable
         tests={tests}
       />
     </div>
   );
-}
-
-function Tests() {
-  if (!getUser()) {
-    return <Redirect to="/signIn" />;
-  }
-  return <TestsImpl />;
 }
 
 export default Tests;

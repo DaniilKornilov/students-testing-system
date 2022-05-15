@@ -4,11 +4,11 @@ import Button from '@mui/material/Button';
 import Alert from '@mui/material/Alert';
 import Collapse from '@mui/material/Collapse';
 import Box from '@mui/material/Box';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import signIn from '../services/sign-in';
 
 function Login() {
-  const history = useHistory();
+  const navigate = useNavigate();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [errorOpen, setErrorOpen] = useState(false);
@@ -34,7 +34,7 @@ function Login() {
 
     signIn(username, password)
       .then(() => {
-        history.push('/');
+        navigate('/');
       })
       .catch(() => {
         setErrorOpen(true);

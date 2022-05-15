@@ -10,13 +10,13 @@ import {
   Avatar, Box, Tooltip,
 } from '@mui/material';
 import Collapse from '@mui/material/Collapse';
-import { useHistory, withRouter } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import store from '../store';
 import getUser from '../services/get-user';
 import signOut from '../services/sign-out';
 
 function Header() {
-  const history = useHistory();
+  const navigate = useNavigate();
   const [anchorElUser, setAnchorElUser] = useState(null);
   const [isOpen, setIsOpen] = useState(false);
 
@@ -27,7 +27,7 @@ function Header() {
   }, [store]);
 
   const handleButtonClick = (pageURL) => {
-    history.push(pageURL);
+    navigate(pageURL);
   };
 
   const handleOpenUserMenu = (event) => {
@@ -36,13 +36,13 @@ function Header() {
 
   const handleCloseUserMenu = (pageURL) => {
     setAnchorElUser(null);
-    history.push(pageURL);
+    navigate(pageURL);
   };
 
   const handleSignOut = () => {
     setAnchorElUser(null);
     signOut();
-    history.push('/signIn');
+    navigate('/signIn');
   };
 
   const menuItems = [
@@ -155,4 +155,4 @@ function Header() {
   );
 }
 
-export default withRouter(Header);
+export default Header;

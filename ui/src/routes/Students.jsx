@@ -5,7 +5,6 @@ import Button from '@mui/material/Button';
 import CancelOutlinedIcon from '@mui/icons-material/CancelOutlined';
 import FileUploadIcon from '@mui/icons-material/FileUpload';
 import axios from 'axios';
-import { Redirect } from 'react-router-dom';
 import MenuItem from '@mui/material/MenuItem';
 import { styled } from '@mui/styles';
 import Alert from '@mui/material/Alert';
@@ -20,7 +19,7 @@ const API_URL_GROUP = 'http://localhost:8080/api/group';
 
 const API_URL_STUDENT_BY_GROUP = 'http://localhost:8080/api/student/group/?group=';
 
-function StudentsImpl() {
+function Students() {
   const [groups, setGroups] = React.useState([]);
   const [groupComboBoxValue, setGroupComboBoxValue] = React.useState('');
   const [students, setStudents] = React.useState([]);
@@ -174,14 +173,6 @@ function StudentsImpl() {
       />
     </div>
   );
-}
-
-function Students() {
-  if (!getUser()) {
-    return <Redirect to="/signIn" />;
-  }
-
-  return <StudentsImpl />;
 }
 
 export default Students;
