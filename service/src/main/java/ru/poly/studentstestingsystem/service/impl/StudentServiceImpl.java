@@ -103,7 +103,8 @@ public class StudentServiceImpl implements StudentService {
 
             Teacher teacher = getTeacher(studentUsernameValues.getTeacherUsername());
 
-            getCourseOrCreateNewByName(studentUsernameValues.getCourseName(), group, teacher);
+            Course course = getCourseOrCreateNewByName(studentUsernameValues.getCourseName(), teacher);
+            course.getGroups().add(group);
 
             Student savedStudent = studentRepository.save(student);
             savedStudentDtos.add(studentMapper.map(savedStudent));
@@ -155,15 +156,15 @@ public class StudentServiceImpl implements StudentService {
         }
     }
 
-    private void getCourseOrCreateNewByName(String courseName, Group group, Teacher teacher) {
+    private Course getCourseOrCreateNewByName(String courseName, Teacher teacher) {
         Optional<Course> courseOptional = courseRepository.findByName(courseName);
         if (courseOptional.isEmpty()) {
             Course course = new Course();
             course.setName(courseName);
             course.setTeacher(teacher);
-            course.getGroups().add(group);
-            courseRepository.saveAndFlush(course);
+            return courseRepository.saveAndFlush(course);
         }
+        return courseOptional.get();
     }
 
     private Teacher getTeacher(String teacherUsername) {
