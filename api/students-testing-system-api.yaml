@@ -1,0 +1,499 @@
+openapi: 3.0.1
+info:
+  title: OpenAPI definition
+  version: v0
+servers:
+  - url: http://localhost:8080
+    description: Generated server url
+paths:
+  /api/test:
+    get:
+      tags:
+        - test-controller
+      operationId: getTests
+      responses:
+        "400":
+          description: Bad Request
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ValidationErrorResponse'
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TestDto'
+    post:
+      tags:
+        - test-controller
+      operationId: importTest
+      parameters:
+        - name: courseName
+          in: query
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              required:
+                - file
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+      responses:
+        "400":
+          description: Bad Request
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ValidationErrorResponse'
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/TestDto'
+  /api/teacher/signUp:
+    post:
+      tags:
+        - teacher-controller
+      operationId: registerUser
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TeacherSignUpRequest'
+        required: true
+      responses:
+        "400":
+          description: Bad Request
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ValidationErrorResponse'
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+  /api/student:
+    get:
+      tags:
+        - student-controller
+      operationId: getStudents
+      responses:
+        "400":
+          description: Bad Request
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ValidationErrorResponse'
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/StudentDto'
+    post:
+      tags:
+        - student-controller
+      operationId: importStudents
+      parameters:
+        - name: teacherUsername
+          in: query
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              required:
+                - file
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+      responses:
+        "400":
+          description: Bad Request
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ValidationErrorResponse'
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/StudentDto'
+  /api/auth/signUp:
+    post:
+      tags:
+        - auth-controller
+      operationId: registerUser_1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SignUpRequest'
+        required: true
+      responses:
+        "400":
+          description: Bad Request
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ValidationErrorResponse'
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+  /api/test/course/:
+    get:
+      tags:
+        - test-controller
+      operationId: getTestsByCourseName
+      parameters:
+        - name: course
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        "400":
+          description: Bad Request
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ValidationErrorResponse'
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TestDto'
+  /api/student/id/{id}:
+    get:
+      tags:
+        - student-controller
+      operationId: getStudentById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        "400":
+          description: Bad Request
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ValidationErrorResponse'
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/StudentDto'
+  /api/student/group/:
+    get:
+      tags:
+        - student-controller
+      operationId: getStudentByGroupName
+      parameters:
+        - name: group
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        "400":
+          description: Bad Request
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ValidationErrorResponse'
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/StudentDto'
+  /api/group:
+    get:
+      tags:
+        - group-controller
+      operationId: getStudents_1
+      responses:
+        "400":
+          description: Bad Request
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ValidationErrorResponse'
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/GroupDto'
+  /api/group/{id}:
+    get:
+      tags:
+        - group-controller
+      operationId: getStudentById_1
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        "400":
+          description: Bad Request
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ValidationErrorResponse'
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/GroupDto'
+  /api/course:
+    get:
+      tags:
+        - course-controller
+      operationId: getCourses
+      responses:
+        "400":
+          description: Bad Request
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ValidationErrorResponse'
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CourseDto'
+components:
+  schemas:
+    ValidationErrorResponse:
+      type: object
+      properties:
+        violations:
+          type: array
+          items:
+            $ref: '#/components/schemas/Violation'
+    Violation:
+      type: object
+      properties:
+        fieldName:
+          type: string
+        message:
+          type: string
+    CourseDto:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+        teacherDto:
+          $ref: '#/components/schemas/TeacherDto'
+        groupDtos:
+          uniqueItems: true
+          type: array
+          items:
+            $ref: '#/components/schemas/GroupDto'
+    GroupDto:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+    LocalTime:
+      type: object
+      properties:
+        hour:
+          type: integer
+          format: int32
+        minute:
+          type: integer
+          format: int32
+        second:
+          type: integer
+          format: int32
+        nano:
+          type: integer
+          format: int32
+    RoleDto:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        roleName:
+          type: string
+          enum:
+            - ROLE_STUDENT
+            - ROLE_ADMIN
+            - ROLE_TEACHER
+    TeacherDto:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        firstName:
+          type: string
+        lastName:
+          type: string
+        userDto:
+          $ref: '#/components/schemas/UserDto'
+    TestDto:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+        description:
+          type: string
+        createdTimestamp:
+          type: string
+          format: date-time
+        updatedTimestamp:
+          type: string
+          format: date-time
+        timeLimit:
+          $ref: '#/components/schemas/LocalTime'
+        availableFrom:
+          type: string
+          format: date-time
+        availableTo:
+          type: string
+          format: date-time
+        courseDto:
+          $ref: '#/components/schemas/CourseDto'
+    UserDto:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        email:
+          type: string
+        username:
+          type: string
+        roles:
+          uniqueItems: true
+          type: array
+          items:
+            $ref: '#/components/schemas/RoleDto'
+    TeacherSignUpRequest:
+      required:
+        - firstName
+        - lastName
+        - password
+        - roles
+        - username
+      type: object
+      properties:
+        username:
+          maxLength: 20
+          minLength: 2
+          type: string
+        password:
+          maxLength: 20
+          minLength: 6
+          type: string
+        email:
+          type: string
+        roles:
+          maxItems: 2147483647
+          minItems: 1
+          uniqueItems: true
+          type: array
+          items:
+            type: string
+        firstName:
+          maxLength: 20
+          minLength: 2
+          type: string
+        lastName:
+          maxLength: 20
+          minLength: 2
+          type: string
+    StudentDto:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        firstName:
+          type: string
+        lastName:
+          type: string
+        groupDto:
+          $ref: '#/components/schemas/GroupDto'
+        userDto:
+          $ref: '#/components/schemas/UserDto'
+    SignUpRequest:
+      required:
+        - password
+        - roles
+        - username
+      type: object
+      properties:
+        username:
+          maxLength: 20
+          minLength: 2
+          type: string
+        password:
+          maxLength: 20
+          minLength: 6
+          type: string
+        email:
+          type: string
+        roles:
+          maxItems: 2147483647
+          minItems: 1
+          uniqueItems: true
+          type: array
+          items:
+            type: string
